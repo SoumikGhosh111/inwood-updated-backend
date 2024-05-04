@@ -4,7 +4,9 @@ const bodyParser = require('body-parser');
 const connectDB = require('./config/db');
 const userRoutes = require('./routes/userRoutes');
 const productRoutes = require('./routes/product');
+const adminRoutes = require("./routes/admin")
 const imageRoutes = require('./routes/image')
+const stripeRoutes = require('./routes/stripe')
 const cors = require("cors")
 
 const app = express();
@@ -21,6 +23,11 @@ connectDB();
 app.use('/api/users', userRoutes);
 app.use('/api/image', imageRoutes);
 app.use('/api/product', productRoutes);
+app.use('/api/stripe', stripeRoutes);
+
+// Admin Routes
+app.use('/admin', adminRoutes);
+
 
 // Error handling middleware
 app.use((err, req, res, next) => {

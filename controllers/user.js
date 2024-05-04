@@ -103,6 +103,7 @@ const authController = async (req, res) => {
                 success: false,
             })
         } else{
+            console.log(user);
             return res.status(200).send({
                 message: "Register Successfully",
                 data: {
@@ -120,37 +121,35 @@ const authController = async (req, res) => {
     }
 };
 
-const loginController = async(req, res) =>{
+const loginController = async (req, res) => {
     try {
-        const user = await User.findOne({email: req.body.email}).select(
+        const user = await User.findOne({ email: req.body.email }).select(
             "+password"
         );
-        if(!user){
+        if (!user) {
             return res.status(200).send({
-                message: "user not found",
+                message: "User not found",
                 success: false,
             });
         }
 
-        const isMatch = await bcrypt.compare(req.body.password, user.password)
-        const signuser = await User.findOne({email: req.body.email})
-        
-        if(!isMatch) {
-            res.status(500).send({
+        const isMatch = await bcrypt.compare(req.body.password, user.password);
+        if (!isMatch) {
+            return res.status(500).send({
                 success: false,
-                message: "Invalid Password and Email",
+                message: "Invalid Password",
             });
         }
 
-        const token = jwt.sign({id : signuser._id}, process.env.JWT_SECRET, {
+        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
             expiresIn: "1d",
         });
 
         return res.status(201).send({
-            message: "Login Sucessfully",
+            message: "Login Successfully",
             data: {
-            user: signuser,
-            token,
+                user,
+                token,
             },
             success: true,
         });
@@ -158,12 +157,13 @@ const loginController = async(req, res) =>{
         console.log(error);
         res.status(500).send({
             success: false,
-            message: "Auth error",
-        });
-    }
-}
+            message: "Authentication error",
+        });
+    }
+};
 
 const verifyOTPController = async (req, res) => {
+    console.log("hello"); 
     try {
         const user = await User.findOne({ email: req.body.email });
 
@@ -222,7 +222,34 @@ const updateUserProfile = async (req, res) => {
         });
     }
 }
+const getUserByEmail = async (req, res) => {
+    try {
+        const { email } = req.params;
+        
+        const userDetails = await User.findOne({ email });
 
+        if (!userDetails) {
+            return res.status(404).json({
+                error: "User not found",
+                success: false
+            });
+        }
+
+        res.status(200).json({
+            message: "User Details",
+            success: true,
+            data: {
+                user: userDetails 
+            }
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            error: "Internal Server Error",
+            success: false,
+        });
+    }
+};
 const sendOtp = async (req, res) => {
     try {
         const { email } = req.body;
@@ -313,4 +340,4 @@ const changePassword = async (req, res) => {
 };
 
 
-module.exports = {registerController, authController, loginController, verifyOTPController, updateUserProfile, sendOtp, verifyOTP, changePassword};
+module.exports = {registerController, authController, loginController, verifyOTPController, updateUserProfile,getUserByEmail, sendOtp, verifyOTP, changePassword};
