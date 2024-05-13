@@ -7,6 +7,7 @@ const productRoutes = require('./routes/product');
 const adminRoutes = require("./routes/admin")
 const imageRoutes = require('./routes/image')
 const stripeRoutes = require('./routes/stripe')
+const invoiceRoutes = require('./routes/invoice');
 const cors = require("cors")
 
 const app = express();
@@ -24,6 +25,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/image', imageRoutes);
 app.use('/api/product', productRoutes);
 app.use('/api/stripe', stripeRoutes);
+app.use('/api/invoice', invoiceRoutes); 
 
 // Admin Routes
 app.use('/admin', adminRoutes);

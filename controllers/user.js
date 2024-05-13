@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken")
 const User = require("../models/User")
 const nodemailer = require("nodemailer")
 const otpGenerator = require("otp-generator")
+const { Order } = require("../models/Order"); 
 require('dotenv').config();
 
 
@@ -339,5 +340,16 @@ const changePassword = async (req, res) => {
     }
 };
 
+const getUserOrders = async (req, res) => {
+    const { userId } = req.params;
+    try {
+      const orders = await Order.find({ userId });
+      res.json(orders);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  };
 
-module.exports = {registerController, authController, loginController, verifyOTPController, updateUserProfile,getUserByEmail, sendOtp, verifyOTP, changePassword};
+
+module.exports = {registerController, authController, loginController, verifyOTPController, updateUserProfile,getUserByEmail, sendOtp, verifyOTP, changePassword, getUserOrders};

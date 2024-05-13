@@ -1,8 +1,22 @@
-const express = require("express");
-const { createCheckoutSession } = require("../controllers/checkoutcontroller")
+// const express = require("express");
+// const { createCheckoutSession } = require("../controllers/checkoutcontroller")
 
-const router = express.Router();
+// const router = express.Router();
+
+// router.post("/create-checkout-session", createCheckoutSession);
+
+// module.exports = router
+
+
+const express = require("express");
+const {createCheckoutSession, handleWebhook, getAllOrders} = require("../controllers/checkoutcontroller"); 
+const verifyAdmin = require("../middleware/adminMiddleware");
+const protect = require("../middleware/authMiddleware");
+
+router = express.Router();
 
 router.post("/create-checkout-session", createCheckoutSession);
+// router.post("/webhook", handleWebhook);
+router.get("/allOrder",protect, getAllOrders);
 
-module.exports = router
+module.exports = router;

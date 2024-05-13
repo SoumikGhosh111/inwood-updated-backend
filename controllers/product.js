@@ -51,24 +51,60 @@ const getFoodById = async (req, res) => {
     }
 };
 
+// const getAllFoods = async (req, res) => {
+//     try {
+//         const foodItems = await Product.find();
+
+//          res.status(200).json({
+//             message: "View Food Successfully",
+//             successz: true,
+//             data:{
+//                 food: foodItems,
+//             }
+//          })
+//     } catch (error) {
+//         console.log(error);
+//         res.status(500).json({
+//             error: "Internal Server Error",
+//             success: false,
+//         });
+//     }
+// };
+
+
 const getAllFoods = async (req, res) => {
     try {
-        const foodItems = await Product.find();
+        const {catagory} = req.params;
+        console.log(catagory);
+        if(catagory === "All"){
 
-         res.status(200).json({
-            message: "View Food Successfully",
-            successz: true,
-            data:{
-                food: foodItems,
-            }
-         })
+            const foodItems = await Product.find();
+    
+             res.status(200).json({
+                message: "View Food Successfully",
+                successz: true,
+                data:{
+                    food: foodItems,
+                }
+             })
+        } else{
+            const foodItems = await Product.find({ catagory: catagory});
+
+            res.status(200).json({
+                message: "View Food Successfully",
+                successz: true,
+                data:{
+                    food: foodItems,
+                }
+             });
+        }
     } catch (error) {
         console.log(error);
         res.status(500).json({
             error: "Internal Server Error",
             success: false,
-        });
-    }
+        });
+    }
 };
 
 module.exports = {createFood, getAllFoods, getFoodById}
@@ -84,37 +120,3 @@ module.exports = {createFood, getAllFoods, getFoodById}
 
 
 
-// const getAllFoods = async (req, res) => {
-//     try {
-//         const {catagory} = req.query;
-//         console.log(catagory);
-//         if(catagory === "All"){
-
-//             const foodItems = await Product.find();
-    
-//              res.status(200).json({
-//                 message: "View Food Successfully",
-//                 successz: true,
-//                 data:{
-//                     food: foodItems,
-//                 }
-//              })
-//         } else{
-//             const foodItems = await Product.find({ catagory: catagory});
-
-//             res.status(200).json({
-//                 message: "View Food Successfully",
-//                 successz: true,
-//                 data:{
-//                     food: foodItems,
-//                 }
-//              });
-//         }
-//     } catch (error) {
-//         console.log(error);
-//         res.status(500).json({
-//             error: "Internal Server Error",
-//             success: false,
-//         });
-//     }
-// };

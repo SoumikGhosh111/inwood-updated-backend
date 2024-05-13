@@ -1,6 +1,7 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken")
-const User = require("../models/User")
+const User = require("../models/User"); 
+const { Order } = require("../models/Order");
 require('dotenv').config();
 
 
@@ -48,8 +49,29 @@ const getAdmin = async (req, res) => {
     }
 };
 
+ const orderStatusController = async (req, res) => {
+    try {
+      const { orderId } = req.params;
+      const { delivery_status } = req.body;
+      const orders = await Order.findByIdAndUpdate(
+        orderId,
+        { delivery_status },
+        { new: true }
+      );
+      res.json(orders);
+    } catch (error) {
+      console.log(error);
+      res.status(500).send({
+        success: false,
+        message: "Error While Updateing Order",
+        error,
+      });
+    }
+  };
+
 module.exports = {
     getAllUsers,
     deleteUser,
-    getAdmin
+    getAdmin,
+    orderStatusController
 }
