@@ -5,7 +5,7 @@ const { getAllUsers, deleteUser, getAdmin, orderStatusController } = require("..
 
 const router = express.Router();
 
-router.get("/alluser", getAllUsers); //verifyAdmin, protect,
+router.get("/alluser/:email", protect,verifyAdmin, getAllUsers); //verifyAdmin, protect,
 router.delete("/deleteUser/:id", deleteUser); //verifyAdmin, protect,
 router.get("/isAdmin/:email", getAdmin); // verifyAdmin,  protect,
 router.put(

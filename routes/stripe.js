@@ -16,7 +16,7 @@ const protect = require("../middleware/authMiddleware");
 router = express.Router();
 
 router.post("/create-checkout-session", createCheckoutSession);
-// router.post("/webhook", handleWebhook);
-router.get("/allOrder",protect, getAllOrders);
+router.post("/webhook", handleWebhook);
+router.get("/allOrder/:email",protect,verifyAdmin, getAllOrders);
 
 module.exports = router;
